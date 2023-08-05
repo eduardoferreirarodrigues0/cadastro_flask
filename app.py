@@ -4,20 +4,6 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = '12345'
 
-def init_db():
-        conn = sqlite3.connect('users.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL,
-                password TEXT NOT NULL
-            )
-        ''')
-        conn.commit()
-        conn.close()
-init_db()
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -50,8 +36,7 @@ def login():
             flash('Login realizado com sucesso!')
             return redirect(url_for('perfil'))
         else:
-            flash('Usuário ou senha incorretos.')
-            return redirect(url_for('login'))
+            return 'Usuário ou senha incorretos.'
 
 @app.route('/perfil')
 def perfil():
@@ -67,6 +52,21 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
      
+
+def init_db():
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )
+        ''')
+        conn.commit()
+        conn.close()
+init_db()
+
 
 if __name__ == '__main__':
     app.run(debug=True)

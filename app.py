@@ -46,7 +46,7 @@ def login():
         user = cursor.fetchone()
         conn.close()
         if user:
-            session['username'] = user[0]
+            session['username'] = user[1]
             flash('Login realizado com sucesso!')
             return redirect(url_for('perfil'))
         else:
